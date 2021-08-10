@@ -15,11 +15,11 @@ async function login() {
         });
         const data = await response.json();
         if (response.ok) {
-            sessionStorage.setItem("First Name", data[0])
-            sessionStorage.setItem("Last Name", data[1])
-            sessionStorage.setItem("User ID", data[2])
-            sessionStorage.setItem("College", data[3])
-            sessionStorage.setItem("hasLoggedIn", true)
+            sessionStorage.setItem("First Name", data.name[0])
+            sessionStorage.setItem("Last Name", data.name[1])
+            sessionStorage.setItem("User ID", data.name[2])
+            sessionStorage.setItem("College", data.name[3])
+            sessionStorage.setItem("Token", data.token)
             window.location.href = "index.html";
         } else {
             Swal.fire({
