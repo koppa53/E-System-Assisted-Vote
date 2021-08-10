@@ -1,6 +1,6 @@
 
 function checkAuth() {
-    if (sessionStorage.hasOwnProperty('hasLoggedIn')) {
+    if (sessionStorage.hasOwnProperty('Token')) {
     } else {
         window.location.href = "auth-login.html"
     }

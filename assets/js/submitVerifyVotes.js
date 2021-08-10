@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    var tok = sessionStorage.getItem("Token");
     let pos = new Array()
     let poscsc = new Array()
     loadPositions()
@@ -232,6 +232,7 @@ $(document).ready(function () {
             const response = await fetch('http://localhost:5000/new_assisted_student_vote', {
                 method: "POST",
                 headers: {
+                    "authorization": tok,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
@@ -258,6 +259,7 @@ $(document).ready(function () {
             const response = await fetch('http://localhost:5000/new_assisted_student_vote', {
                 method: "POST",
                 headers: {
+                    "authorization": tok,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
