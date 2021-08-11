@@ -76,6 +76,7 @@ $(document).ready(function () {
             const response = await fetch('http://localhost:5000/student_has_voted/' + id, {
                 method: "GET",
                 headers: {
+                    'authorization': tok,
                     'Content-Type': 'application/json',
                 }
             });
