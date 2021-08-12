@@ -16,7 +16,7 @@ $(document).ready(function () {
             })
             var currentposition = ""
             var ballotcounter = 0
-            var count = 0
+            var count = 1
             var rowCount = 0;
             data2.forEach(function (v) {
                 if (currentposition != v.usc_candidate_position) {
@@ -37,7 +37,6 @@ $(document).ready(function () {
                         )
                     }
                     rowCount++
-                    count = 0
                     currentposition = v.usc_candidate_position
                     var binary = '';
                     var bytes = new Uint8Array(v.usc_candidate_photo.data);
@@ -110,7 +109,7 @@ $(document).ready(function () {
                 ballotcounter++;
             })
             var csccurrentposition = ""
-            var csccount = 0
+            var csccount = 1
             var cscrowCount = 100;
             var cscballotcounter = 0
             let poscsc = new Array()
@@ -136,7 +135,6 @@ $(document).ready(function () {
                         )
                     }
                     cscrowCount++
-                    csccount = 0
                     csccurrentposition = v.csc_candidate_position
                     var cscbinary = '';
                     var cscbytes = new Uint8Array(v.csc_candidate_photo.data);
