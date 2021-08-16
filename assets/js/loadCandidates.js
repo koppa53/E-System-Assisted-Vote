@@ -4,17 +4,14 @@ $(document).ready(function () {
     async function loadCandidate() {
         var college = sessionStorage.getItem("College")
         try {
-            let pos = new Array()
             const [data1, data2, data3, data4] = await Promise.all([
                 fetch('http://localhost:5000/all_active_USC_position').then((response) => response.json()),
                 fetch('http://localhost:5000/all_usc_ballot_candidate_on_list').then((response) => response.json()),
                 fetch('http://localhost:5000/all_active_CSC_position').then((response) => response.json()),
                 fetch('http://localhost:5000/college_csc_ballot_candidate_on_list/' + college).then((response) => response.json())
             ]);
-            data1.forEach(function (v) {
-                pos.push(v.position_max_vote)
-            })
             var currentposition = ""
+            var listofmaxvote = new Array();
             var ballotcounter = 0
             var count = 1
             var rowCount = 0;
@@ -38,6 +35,10 @@ $(document).ready(function () {
                     }
                     rowCount++
                     currentposition = v.usc_candidate_position
+                    var MAX_VOTE = 0
+                    let obj = data1.find(o => o.position_name === currentposition);
+                    MAX_VOTE = obj.position_max_vote
+                    listofmaxvote.push(obj.position_max_vote)
                     var binary = '';
                     var bytes = new Uint8Array(v.usc_candidate_photo.data);
                     var len = bytes.byteLength;
@@ -49,7 +50,7 @@ $(document).ready(function () {
                         <form>
                         <div class="box-header with-border">
                             <h4 class="box-title"><b>USC `+ currentposition + `</b></h4>
-                            <p> Please select up to <b>`+ pos[rowCount - 1] + ` candidate/s</b>:
+                            <p> Please select up to <b>`+ MAX_VOTE + ` candidate/s</b>:
                             <button type="reset" class="btn btn-sm btn-outline-danger" value="reset" onclick="enableCandidates(`+ rowCount + `)"><i class="fa fa-refresh"></i> Reset</button>
                             </p> 
                         </div>
@@ -109,13 +110,10 @@ $(document).ready(function () {
                 ballotcounter++;
             })
             var csccurrentposition = ""
+            var csclistofmaxvote = new Array();
             var csccount = 1
             var cscrowCount = 100;
             var cscballotcounter = 0
-            let poscsc = new Array()
-            data3.forEach(function (v) {
-                poscsc.push(v.position_max_vote)
-            })
             data4.forEach(function (v) {
                 if (csccurrentposition != v.csc_candidate_position) {
                     if (cscrowCount != 100) {
@@ -136,6 +134,10 @@ $(document).ready(function () {
                     }
                     cscrowCount++
                     csccurrentposition = v.csc_candidate_position
+                    var CSCMAX_VOTE = 0
+                    let cscobj = data3.find(o => o.position_name === csccurrentposition);
+                    CSCMAX_VOTE = cscobj.position_max_vote
+                    csclistofmaxvote.push(cscobj.position_max_vote)
                     var cscbinary = '';
                     var cscbytes = new Uint8Array(v.csc_candidate_photo.data);
                     var csclen = cscbytes.byteLength;
@@ -147,7 +149,7 @@ $(document).ready(function () {
                         <form>
                         <div class="box-header with-border">
                             <h4 class="box-title"><b>CSC `+ csccurrentposition + `</b></h4>
-                            <p> Please select up to <b>`+ poscsc[cscrowCount - 101] + ` candidate/s</b>:
+                            <p> Please select up to <b>`+ CSCMAX_VOTE + ` candidate/s</b>:
                             <button type="reset" class="btn btn-sm btn-outline-danger" value="reset" onclick="enableCandidates(`+ cscrowCount + `)"><i class="fa fa-refresh"></i> Reset</button>
                             </p> 
                         </div>
@@ -207,6 +209,8 @@ $(document).ready(function () {
                 cscballotcounter++;
             })
 
+            sessionStorage.setItem("USC_LIST_OF_MAX_VOTE", listofmaxvote)
+            sessionStorage.setItem("CSC_LIST_OF_MAX_VOTE", csclistofmaxvote)
 
         } catch (err) {
             console.log(err);

@@ -1,21 +1,5 @@
 $(document).ready(function () {
     var tok = sessionStorage.getItem("Token");
-    let pos = new Array()
-    let poscsc = new Array()
-    loadPositions()
-    async function loadPositions() {
-        const [dat1, dat2] = await Promise.all([
-            fetch('http://localhost:5000/all_active_USC_position').then((response) => response.json()),
-            fetch('http://localhost:5000/all_active_CSC_position').then((response) => response.json()),
-        ]);
-        dat1.forEach(function (v) {
-            pos.push(v.position_max_vote)
-        })
-        dat2.forEach(function (v) {
-            poscsc.push(v.position_max_vote)
-        })
-    }
-
     function arraysEqual(a, b) {
         if (a === b) return true;
         if (a == null || b == null) return false;
@@ -156,10 +140,16 @@ $(document).ready(function () {
                 if (split[0] != 'ABSTAINED') verifyCSC.push(split[2])
                 else { verifyCSC.push(-1) }
             })
+            var uscmaxvote = sessionStorage.getItem("USC_LIST_OF_MAX_VOTE")
+            var cscmaxvote = sessionStorage.getItem("CSC_LIST_OF_MAX_VOTE")
+            var u = uscmaxvote.split(',')
+            u = u.map(Number);
+            var c = cscmaxvote.split(',')
+            c = c.map(Number);
             const resultCSC = foo(verifyCSC);
             const resultUSC = foo(verifyUSC);
-            const verifiedUSC = arraysEqual(resultUSC[1], pos)
-            const verifiedCSC = arraysEqual(resultCSC[1], poscsc)
+            const verifiedUSC = arraysEqual(resultUSC[1], u)
+            const verifiedCSC = arraysEqual(resultCSC[1], c)
             if (verifiedUSC === true && verifiedCSC === true) {
                 allUSCVotes = [];
                 allCSCVotes = [];
